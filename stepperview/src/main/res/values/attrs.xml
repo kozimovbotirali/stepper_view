@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="StepperView">
+        <attr name="stepSize" format="integer" />
+        <attr name="stepColor" format="color" />
+        <attr name="currentStep" format="integer" />
+        <attr name="defColor" format="color" />
+    </declare-styleable>
+</resources>
