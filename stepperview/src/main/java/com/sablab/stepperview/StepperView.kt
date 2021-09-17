@@ -3,7 +3,6 @@ package com.sablab.stepperview
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -43,17 +42,11 @@ class StepperView @JvmOverloads constructor(
     var defColor: Int = context.getColor(R.color.defStepColor)
 
     @ColorInt
-    var currentColor: Int = context.getColor(R.color.white)
-
-    @ColorInt
-    var textColor: Int = context.getColor(R.color.black)
+    var currentColor: Int = context.getColor(R.color.initCurrentColor)
 
     private val currentPaint = Paint()
     private val steppedPaint = Paint()
     private val noneSteppedPaint = Paint()
-
-    private val textPaint = TextPaint()
-    private val currentTextPaint = TextPaint()
 
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.StepperView)
@@ -61,6 +54,7 @@ class StepperView @JvmOverloads constructor(
         currentStep = typedArray.getInt(R.styleable.StepperView_currentStep, currentStep)
         stepColor = typedArray.getColor(R.styleable.StepperView_stepColor, stepColor)
         defColor = typedArray.getColor(R.styleable.StepperView_defColor, defColor)
+        currentColor = typedArray.getColor(R.styleable.StepperView_currentColor, currentColor)
         typedArray.recycle()
 
         currentPaint.style = Paint.Style.FILL
@@ -74,14 +68,6 @@ class StepperView @JvmOverloads constructor(
         noneSteppedPaint.style = Paint.Style.FILL
         noneSteppedPaint.color = defColor
         noneSteppedPaint.strokeWidth = defCircleRadius / 2
-
-        textPaint.color = textColor
-        textPaint.textSize = defCircleRadius
-        textPaint.textAlign = Paint.Align.CENTER
-
-        currentTextPaint.color = currentColor
-        currentTextPaint.textSize = defCircleRadius
-        currentTextPaint.textAlign = Paint.Align.CENTER
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -155,16 +141,13 @@ class StepperView @JvmOverloads constructor(
         canvas.drawLine(steppedXEnd, startY, noneSteppedXEnd, startY, noneSteppedPaint)
 
         for (i in 0 until stepSize) {
-            canvas.drawCircle(startX, startY, defCircleRadius, if ((i + 1) <= currentStep) steppedPaint else noneSteppedPaint)
             if ((i + 1) == currentStep) {
                 canvas.drawCircle(
-                    startX, startY, defCircleRadius * 0.7f,
+                    startX, startY, defCircleRadius * 1.2f,
                     currentPaint
                 )
-                canvas.drawText("${i + 1}", startX, startY + defCircleRadius / 3, textPaint)
-            } else {
-                canvas.drawText("${i + 1}", startX, startY + defCircleRadius / 3, currentTextPaint)
             }
+            canvas.drawCircle(startX, startY, defCircleRadius * 0.8f, if ((i + 1) <= currentStep) steppedPaint else noneSteppedPaint)
             startX += defCircleRadius * 3
         }
     }

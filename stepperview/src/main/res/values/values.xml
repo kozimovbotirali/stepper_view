@@ -4,4 +4,5 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="initStepColor">#F41313</color>
+    <color name="initCurrentColor">#FF7777</color>
 </resources>

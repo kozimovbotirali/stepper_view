@@ -4,7 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.button.MaterialButton
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,19 +13,26 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val stepper = findViewById<StepperView>(R.id.stepper)
-        val next = findViewById<MaterialButton>(R.id.next)
+        start()
+    }
 
-        next.setOnClickListener {
-            if (stepper.isComplete) {
-                next.text = getString(R.string.next)
-                stepper.restart()
-            } else
+    private fun start() {
+        val stepper = findViewById<StepperView>(R.id.stepper)
+
+        stepper.stepSize = 9
+        lifecycleScope.launchWhenCreated {
+            for (i in 1..9) {
+                delay(200)
                 stepper.currentStep++
+            }
+
+            for (i in 9 downTo 2) {
+                delay(200)
+                stepper.currentStep--
+            }
         }
 
         stepper.setOnCompleteListener {
-            next.text = "Restart"
             Toast.makeText(this, "Completed", Toast.LENGTH_SHORT).show()
         }
     }
